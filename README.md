@@ -1,0 +1,1 @@
+# fury-kubecost-demo
