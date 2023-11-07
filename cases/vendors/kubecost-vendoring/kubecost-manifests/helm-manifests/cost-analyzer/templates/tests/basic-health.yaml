@@ -1,0 +1,31 @@
+---
+# Source: cost-analyzer/templates/tests/basic-health.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: basic-health
+  namespace: default
+  annotations:
+    helm.sh/hook: test
+spec:
+  serviceAccountName: cost-analyzer
+  restartPolicy: Never
+  containers:
+  - name: test-kubecost
+    image: alpine/k8s:1.26.9
+    command:
+      - /bin/sh
+    args:
+      - -c
+      - >-
+        svc=$(kubectl -n default get svc -l app.kubernetes.io/name=cost-analyzer -o json | jq -r .items[0].metadata.name);
+        echo Getting current Kubecost state.;
+        response=$(curl -sL http://${svc}:9090/model/getConfigs);
+        code=$(echo ${response} | jq .code);
+        if [ "$code" -eq 200 ]; then
+          echo "Got Kubecost working configuration. Successful."
+          exit 0
+        else 
+          echo "Failed to fetch Kubecost configuration. Response was $response"
+          exit 1
+        fi
