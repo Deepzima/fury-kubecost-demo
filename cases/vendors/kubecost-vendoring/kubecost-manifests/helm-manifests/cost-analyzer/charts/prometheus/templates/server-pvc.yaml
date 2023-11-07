@@ -1,0 +1,19 @@
+---
+# Source: cost-analyzer/charts/prometheus/templates/server-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    component: "server"
+    app: prometheus
+    release: cost-analyzer
+    chart: prometheus-11.0.2
+    heritage: Helm
+  name: cost-analyzer-prometheus-server
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "32Gi"

@@ -1,0 +1,28 @@
+---
+# Source: cost-analyzer/templates/cost-analyzer-service-template.yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: cost-analyzer-cost-analyzer
+  namespace: default
+  labels:
+    
+    app.kubernetes.io/name: cost-analyzer
+    helm.sh/chart: cost-analyzer-1.107.0
+    app.kubernetes.io/instance: cost-analyzer
+    app.kubernetes.io/managed-by: Helm
+    app: cost-analyzer
+spec:
+  selector:
+    
+    app.kubernetes.io/name: cost-analyzer
+    app.kubernetes.io/instance: cost-analyzer
+    app: cost-analyzer
+  type: "ClusterIP"
+  ports:
+    - name: tcp-model
+      port: 9003
+      targetPort: 9003
+    - name: tcp-frontend
+      port: 9090
+      targetPort: 9090
